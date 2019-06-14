@@ -1,2 +1,2 @@
 # grove-code-challenge
-Grove Collaborative coding challenge (06/14/2019)
+[Grove Collaborative](https://github.com/groveco) coding challenge (06/14/2019)
