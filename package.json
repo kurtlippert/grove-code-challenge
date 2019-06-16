@@ -2,19 +2,19 @@
   "name": "grove-code-challenge",
   "version": "1.0.0",
   "description": "Grove Collaborative code challenge",
-  "main": "index.ts",
+  "main": "index.js",
   "repository": "git@github.com:kurtlippert/grove-code-challenge.git",
   "author": "Kurt Lippert <kurtlippert@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "node index.js",
+    "build": "pkg index.js --output find-store",
+    "test": "tape index.spec.js"
   },
   "dependencies": {
-    "@types/csvtojson": "^1.1.5",
-    "@types/node": "^12.0.8",
     "csvtojson": "^2.0.8",
+    "node-fetch": "^2.6.0",
     "pkg": "^4.4.0",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.5.2"
+    "tape": "^4.10.2"
   }
 }
