@@ -27,7 +27,7 @@ The functions:
     - If the current store's distance between the address the user specified is less than the previous store's distance, we return the current (otherwise, the previous). Since this store will then get carried over to the next iteration of the `reduce` function, we can compare the next store with the previous winner.
     - And so on and so forth. Effectively getting us the store with the best match  
 
-Though it is worth mentioning the `args` varible I create:
+Though it is worth mentioning the `args` function I create:
 - We filter out all the stuff we don't care about
 - We reform the array into a javascript object (that `reduce` bit at the end)  
 
@@ -39,8 +39,7 @@ Though it is worth mentioning the `args` varible I create:
     - `--zip=`
     - `--units=`
     - `--output=`
-  - Not all of these are required, but 
-- Need to 
+  - Not all of these are required, but there must be `--address=` or `--zip=` for the program to run
 
 **Reading from csv and converting to JSON**  
 - `csvtojson` library
@@ -57,8 +56,8 @@ Though it is worth mentioning the `args` varible I create:
 
 ### Notes and caveats
 - I used the [ArcGIS Geocoding Services](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#) for geocoding addresses and zip codes (they appear to do it for free?) 
-  - They address (string format) to coordinates and zip to coordinates which takes care of the AC given by Grove
-  - There are libs that calc distance b/t coordinates, but the requirements stipulate I roll my own
+  - The endpoint geocodes addresses to coordinates and zip to coordinates which takes care of the AC given by Grove
+- There are libs that calc distance b/t coordinates, but the requirements stipulate I roll my own
 - If the user specifies both an `--address` and `--zip` flag, the program just uses the `--address` specified
 - In order to run the executable, you need to append `./` (regardless of OS I believe). There are a few ways to avoid this, but didn't believe it worth the effort given it wasn't within the AC given by Grove.
 - I likely didn't cover every single use case and possible path the user could take, but tried to take into account the common scenarios (not including the address or zip flag, etc.)
