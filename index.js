@@ -15,6 +15,7 @@ Math.radians = (degrees) =>
 	degrees * Math.PI / 180;
 
 /**
+ * source: https://www.movable-type.co.uk/scripts/latlong.html
  * 
  * @param {x: number, y: number} coor1 The first x/y coordinate we're comparing
  * @param {x: number, y: number} coor2 The second x/y coordinate we're comparing
@@ -23,7 +24,7 @@ Math.radians = (degrees) =>
  * @returns {number} The distance between the coordinates
  */
 const getCoordinateDistance = (coor1, coor2, units='mi') => {
-  var R = units === 'km' ? 6371 : 3958.8
+  var R = units.toLowerCase() === 'km' ? 6371 : 3958.8
 
   var φ1 = Math.radians(coor1.y);
   var φ2 = Math.radians(coor2.y);
@@ -62,14 +63,15 @@ const findClosestStore = (gisAddressCoordinates, stores, units) =>
 const prettyPrintStore = (store) => {
   const units = args.units === 'km' ? 'Kilometers' : 'Miles'
   const addressOrZip = args.address ? 'address' : 'zip code'
-  console.log(`\nThe closest store is ~${Math.round(store.Distance)} ${units} away from that ${addressOrZip}\n`)
-  console.log(EasyTable.print(store))
+  // console.log(`\nThe closest store is ~${Math.round(store.Distance)} ${units} away from that ${addressOrZip}\n\n${EasyTable.print(store)}`)
+  return `\nThe closest store is ~${Math.round(store.Distance)} ${units} away from that ${addressOrZip}\n\n${EasyTable.print(store)}`
 }
 
 // Ignore any arguments we (likely) don't care about
 // Then form the args we do into a new object
-const args = 
-  process.argv
+// We wrap this in a function so the tes
+const args = (argv) =>
+  argv
     .filter((_, index) => index > 1)
     .filter(arg =>
       arg.startsWith('--address=') ||
@@ -83,11 +85,18 @@ const args =
       return { ...acc, [k.substring(2)]: v }
     }, {})
 
-// run
-if (process.env.npm_lifecycle_event !== 'test') {
-  if (Object.keys(args) < 1) {
-    console.log(
-      `Usage:
+/**
+ * param here could be 'zip', 'address', 'units', or 'output'
+ * we do some checking here:
+ * - is there an 'address' or 'zip' field?
+ * - is there 'address'? if not, use 'zip'
+ * 
+ * @param {...arg} args really just an object with some values
+ */
+const run = (args) => {
+  // looking for one or more args, but one of those args must be address or zip
+  if (Object.keys(args) < 1 || !(args.address || args.zip)) {
+    console.log(`Usage:
       find_store --address="<address>"
       find_store --address="<address>" [--units=(mi|km)] [--output=text|json]
       find_store --zip=<zip>
@@ -96,6 +105,7 @@ if (process.env.npm_lifecycle_event !== 'test') {
   else {
     Promise.all([
       csv().fromFile(path.resolve(process.cwd(), 'store-locations.csv')),
+
       // doesn't really matter if we have 'address' or 'zip', we form the call to the endpoint similarly
       fetch(geocodingEndpoint(args.address || args.zip))
         .then(res => res.json())
@@ -118,15 +128,24 @@ if (process.env.npm_lifecycle_event !== 'test') {
       const closestStore = findClosestStore(gisAddressCoordinates, stores, args.units === 'km' ? 'km' : 'mi')
 
       // Print results to stdout 'pretty' by default
-      args.output === 'json'
-        ? console.log(closestStore)
-        : prettyPrintStore(closestStore)
+      if (args.output === 'json') {
+        console.log(closestStore)
+      }
+      else {
+        console.log(prettyPrintStore(closestStore))
+      }
     })
   }
+}
+
+// entrypoint, we don't want the test runner to run the program
+if (process.env.npm_lifecycle_event !== 'test') {
+  run(args(process.argv))
 }
 
 // This bit is mainly for the test file to consume these functions (for testing)
 module.exports = {
   getCoordinateDistance,
-  findClosestStore
+  findClosestStore,
+  args
 }
