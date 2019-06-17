@@ -61,7 +61,8 @@ const findClosestStore = (gisAddressCoordinates, stores, units) =>
 
 const prettyPrintStore = (store) => {
   const units = args.units === 'km' ? 'Kilometers' : 'Miles'
-  console.log(`\nThe closest store is ~${Math.round(store.Distance)} ${units} away from that address\n`)
+  const addressOrZip = args.address ? 'address' : 'zip code'
+  console.log(`\nThe closest store is ~${Math.round(store.Distance)} ${units} away from that ${addressOrZip}\n`)
   console.log(EasyTable.print(store))
 }
 
