@@ -22,7 +22,7 @@ The functions:
   - By default, the algorithm calculates the distance in meters. I added a conditional to make it use miles by default, and kilometers if specified.
   - The `Math` js module doesn't include a function to convert degrees to radians (and degrees is the unit I get from the `store-locations.csv` file as well as the arcGIS endpoint) so I added an extension to it called `radians` and used this in place of the `toRadians()` function the algorithm on the web page uses (which incidentally doesn't exist in node)
 - `findClosestStore`  
-  - We're basically comparing coordinate distance (using the above `getCoordinateDistance` formula) for the JS object we get back from the GIS geocoding enpoint with the list of stores (that include long and lat).
+  - We're basically comparing coordinate distance (using the above `getCoordinateDistance` formula) for the JS object we get back from the GIS geocoding endpoint with the list of stores (that include long and lat).
   - Depending on the results from `getCoordinateDistance`, depends on how we find the best match:
     - If the current store's distance between the address the user specified is less than the previous store's distance, we return the current (otherwise, the previous). Since this store will then get carried over to the next iteration of the `reduce` function, we can compare the next store with the previous winner.
     - And so on and so forth. Effectively getting us the store with the best match  
