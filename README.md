@@ -11,7 +11,7 @@ See the [repo](https://github.com/groveco/code-challenge)
 - `./find-store [--options]` will run the executable
 
 ### How does it work?
-So the idea here is to create a few key functions we need to get accomplish the Acceptance Criteria, and compose them to create the solution we're looking for. Good Unit Testing of the functions that comprise the flow should then give us some degree of confidence of quality.  
+So the idea here is to create a few key functions we need to accomplish the Acceptance Criteria, and compose them to create the solution we're looking for. Good Unit Testing of the functions that comprise the flow should then give us some degree of confidence of quality.  
 
 The functions:  
 - `getCoordinateDistance`
